@@ -1,0 +1,6 @@
+{
+  "provider": "anthropic",
+  "apiKey": "sk-ant-...",
+  "model": "claude-sonnet-5",
+  "port": 8787
+}

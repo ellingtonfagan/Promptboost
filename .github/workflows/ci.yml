@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Syntax-check JavaScript
+        run: |
+          set -euo pipefail
+          find extension server -name '*.js' -type f -print0 | xargs -0 -n 1 node --check
+
+      - name: Validate JSON
+        run: |
+          set -euo pipefail
+          find . -path './.git' -prune -o -name '*.json' -type f -print0 \
+            | xargs -0 -n 1 node -e "const fs = require('fs'); JSON.parse(fs.readFileSync(process.argv[1], 'utf8'))"
+
+      - name: Secret scan
+        run: |
+          set -euo pipefail
+          # Require enough real key characters that placeholders like "sk-ant-..."
+          # cannot match, while any genuine key still does.
+          if grep -RInE --exclude-dir=.git --exclude-dir=node_modules 'sk-(ant|proj)-[A-Za-z0-9_-]{20,}' .; then
+            echo "Provider secret prefix found in repository."
+            exit 1
+          fi
+
+      - name: Assert extension host permissions stay local
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const manifest = JSON.parse(fs.readFileSync('extension/manifest.json', 'utf8'));
+          const hosts = manifest.host_permissions || [];
+          const forbidden = hosts.filter((host) => /anthropic\.com|openai\.com/i.test(host));
+          if (forbidden.length > 0) {
+            console.error(`Forbidden provider host permission(s): ${forbidden.join(', ')}`);
+            process.exit(1);
+          }
+          NODE

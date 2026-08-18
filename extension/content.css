@@ -1,0 +1,344 @@
+.promptboost-control {
+  position: absolute;
+  z-index: 2147483647;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.18);
+  font: 600 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+.promptboost-control[hidden] {
+  display: none;
+}
+
+.promptboost-button,
+.promptboost-caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  border: 1px solid rgba(17, 24, 39, 0.18);
+  background: #111827;
+  color: #ffffff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.promptboost-button {
+  min-width: 92px;
+  padding: 0 12px;
+  border-radius: 8px 0 0 8px;
+}
+
+.promptboost-caret {
+  width: 30px;
+  margin-left: -1px;
+  padding: 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.promptboost-button:hover,
+.promptboost-caret:hover {
+  background: #0f172a;
+}
+
+.promptboost-button:disabled,
+.promptboost-caret:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.promptboost-menu {
+  position: absolute;
+  top: 38px;
+  right: 0;
+  min-width: 132px;
+  padding: 4px;
+  border: 1px solid rgba(17, 24, 39, 0.16);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(17, 24, 39, 0.14);
+}
+
+.promptboost-menu[hidden] {
+  display: none;
+}
+
+.promptboost-menu-item {
+  display: block;
+  width: 100%;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #111827;
+  font: 500 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.promptboost-menu-item:hover,
+.promptboost-menu-item[aria-checked="true"] {
+  background: #f3f4f6;
+}
+
+.promptboost-toast {
+  position: absolute;
+  z-index: 2147483647;
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 9px 11px;
+  border: 1px solid rgba(185, 28, 28, 0.22);
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #991b1b;
+  box-shadow: 0 8px 22px rgba(17, 24, 39, 0.14);
+  font: 500 13px/1.35 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+.promptboost-panel {
+  position: absolute;
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(17, 24, 39, 0.14);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 16px 42px rgba(17, 24, 39, 0.24);
+  font: 400 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+.promptboost-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.1);
+  background: #f9fafb;
+}
+
+.promptboost-panel-title {
+  font: 700 14px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+.promptboost-panel-dismiss,
+.promptboost-apply {
+  min-height: 30px;
+  border: 1px solid rgba(17, 24, 39, 0.16);
+  border-radius: 6px;
+  font: 600 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.promptboost-panel-dismiss {
+  padding: 0 10px;
+  background: #ffffff;
+  color: #374151;
+}
+
+.promptboost-panel-dismiss:hover {
+  background: #f3f4f6;
+}
+
+.promptboost-panel-body {
+  overflow: auto;
+  padding: 12px;
+}
+
+.promptboost-section {
+  padding: 0 0 14px;
+}
+
+.promptboost-section + .promptboost-section {
+  padding-top: 14px;
+  border-top: 1px solid rgba(17, 24, 39, 0.1);
+}
+
+.promptboost-section:last-child {
+  padding-bottom: 0;
+}
+
+.promptboost-section-title {
+  margin: 0 0 8px;
+  color: #111827;
+  font: 700 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+.promptboost-empty {
+  margin: 0;
+  color: #4b5563;
+}
+
+.promptboost-issue-group + .promptboost-issue-group {
+  margin-top: 10px;
+}
+
+.promptboost-issue-type {
+  margin-bottom: 5px;
+  color: #4b5563;
+  font: 700 11px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+  text-transform: capitalize;
+}
+
+.promptboost-issue {
+  padding: 8px;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.promptboost-issue + .promptboost-issue {
+  margin-top: 6px;
+}
+
+.promptboost-issue-change {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.promptboost-issue-quote,
+.promptboost-issue-fix {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.promptboost-issue-quote {
+  color: #991b1b;
+  text-decoration: line-through;
+}
+
+.promptboost-issue-arrow {
+  flex: 0 0 auto;
+  color: #6b7280;
+}
+
+.promptboost-issue-fix {
+  color: #166534;
+  font-weight: 600;
+}
+
+.promptboost-issue-why {
+  margin-top: 4px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.promptboost-review-text {
+  max-height: 160px;
+  margin: 0 0 8px;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  border-radius: 6px;
+  background: #f9fafb;
+  color: #111827;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.promptboost-apply {
+  width: 100%;
+  padding: 0 12px;
+  background: #111827;
+  color: #ffffff;
+}
+
+.promptboost-apply:hover {
+  background: #0f172a;
+}
+
+.promptboost-apply:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.promptboost-underlay {
+  position: absolute;
+  z-index: 2147483645;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.promptboost-mark {
+  position: absolute;
+  height: 4px;
+  border-bottom: 2px solid #d93025;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.promptboost-marker-popover {
+  position: absolute;
+  z-index: 2147483646;
+  width: min(280px, calc(100vw - 16px));
+  padding: 10px;
+  border: 1px solid rgba(17, 24, 39, 0.14);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 12px 30px rgba(17, 24, 39, 0.2);
+  font: 400 13px/1.35 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+.promptboost-marker-fix {
+  color: #166534;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.promptboost-marker-why {
+  margin-top: 5px;
+  color: #4b5563;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.promptboost-marker-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.promptboost-marker-accept,
+.promptboost-marker-ignore {
+  flex: 1 1 0;
+  min-height: 30px;
+  border: 1px solid rgba(17, 24, 39, 0.16);
+  border-radius: 6px;
+  font: 600 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.promptboost-marker-accept {
+  background: #111827;
+  color: #ffffff;
+}
+
+.promptboost-marker-ignore {
+  background: #ffffff;
+  color: #374151;
+}
+
+.promptboost-marker-accept:hover {
+  background: #0f172a;
+}
+
+.promptboost-marker-ignore:hover {
+  background: #f3f4f6;
+}
