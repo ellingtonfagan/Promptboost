@@ -10,6 +10,56 @@ const MIN_FIELD_WIDTH = 120;
 const CONTEXT_LIMIT = 4000;
 const GMAIL_REVIEW_DEBOUNCE_MS = 3000;
 const DEFAULT_MODE = "simple";
+
+// chrome.runtime disappears from a content script when the extension is
+// reloaded or updated while the page stays open. Every call below must check
+// first, or the page throws on each keystroke once the 3s review timer fires.
+let extensionGone = false;
+
+function isExtensionAlive() {
+  try {
+    return Boolean(chrome?.runtime?.id);
+  } catch {
+    return false;
+  }
+}
+
+function handleExtensionGone(field) {
+  if (extensionGone) {
+    return;
+  }
+  extensionGone = true;
+  try {
+    for (const f of reviewFields) {
+      const s = fieldReviewStates.get(f);
+      if (s) {
+        window.clearTimeout(s.debounceId);
+        s.abortController?.abort();
+      }
+      clearMarkers(f);
+    }
+  } catch {
+    // teardown is best effort — the extension is already gone
+  }
+  showToast(field, "PromptBoost was updated. Reload this page to keep using it.");
+}
+
+async function sendToWorker(message, field) {
+  if (!isExtensionAlive()) {
+    handleExtensionGone(field);
+    return null;
+  }
+  try {
+    return await chrome.runtime.sendMessage(message);
+  } catch (error) {
+    if (String(error?.message || "").includes("Extension context invalidated")) {
+      handleExtensionGone(field);
+      return null;
+    }
+    throw error;
+  }
+}
+
 const VALID_MODES = new Set(["simple", "structured"]);
 const ISSUE_COLORS = {
   grammar: "#d93025",
@@ -268,7 +318,7 @@ async function handleEnhance(event, control) {
         renderReviewPanel(field, target, review);
       }
     } else {
-      const response = await chrome.runtime.sendMessage({
+      const response = await sendToWorker({
         type: "REWRITE",
         payload: {
           text: target.text,
@@ -278,8 +328,11 @@ async function handleEnhance(event, control) {
         }
       });
 
-      if (!response?.ok) {
-        throw new Error(response?.error || "Prompt rewrite failed.");
+      if (response === null) {
+        return; // extension reloaded; handleExtensionGone already told the user
+      }
+      if (!response.ok) {
+        throw new Error(response.error || "Prompt rewrite failed.");
       }
 
       writeTargetText(target, response.text);
@@ -366,11 +419,13 @@ async function runGmailReview(field, target, options) {
   setControlChecking(field, true);
 
   abortController.signal.addEventListener("abort", () => {
-    chrome.runtime.sendMessage({ type: "ABORT_REQUEST", requestId });
+    if (isExtensionAlive()) {
+      try { chrome.runtime.sendMessage({ type: "ABORT_REQUEST", requestId }); } catch {}
+    }
   }, { once: true });
 
   try {
-    const response = await chrome.runtime.sendMessage({
+    const response = await sendToWorker({
       type: "REVIEW",
       requestId,
       payload: {
@@ -416,7 +471,9 @@ function abortGmailReview(field) {
   const requestId = state.requestId;
   state.abortController?.abort();
   if (requestId) {
-    chrome.runtime.sendMessage({ type: "ABORT_REQUEST", requestId });
+    if (isExtensionAlive()) {
+      try { chrome.runtime.sendMessage({ type: "ABORT_REQUEST", requestId }); } catch {}
+    }
   }
   state.inFlight = false;
   state.abortController = null;
